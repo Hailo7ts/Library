@@ -22,10 +22,35 @@ async function fetchData(){
    }
 }
 
+/*=============================  CLASSES =====================================*/
 
+class Book {
+	constructor(title, author, isbn) {
+		this.title = title
+		this.author = author
+		this.isbn = isbn
+		this.isAvailable = true
+	}
+	isAvailable() { }
+	markAsRead() { }
+	displayInfo() { }
+}
 
+class Library {
+	constructor() {
+		this.books = []
+	}
 
+	addBook() { }
+	removeBook() { }
+	displayBooks = function displayBooks() { }
+	//display the number of books in the library
+	noOfBooks() { }
+	//search book in your library
+	searchBook(query) { }
+}
 
+/*================================================================*/
 
 (function($) {
 
