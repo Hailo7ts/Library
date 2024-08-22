@@ -4,6 +4,53 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
+// Get the API key from the query string
+document.querySelector('#getBook').addEventListener('click', getBook)
+
+/*FETCH*/
+async function fetchData(){
+	//store input book value
+	let book = document.querySelector('input').value
+	try{
+		let url = `https://openlibrary.org/search.json?q=${book}`
+		let response = await fetch(url)
+		let data = await response.json()
+		console.log(data)
+	}
+	catch(err){
+	     console.log(`error: ${err}`)
+   }
+}
+
+/*=============================  CLASSES =====================================*/
+
+class Book {
+	constructor(title, author, isbn) {
+		this.title = title
+		this.author = author
+		this.isbn = isbn
+		this.isAvailable = true
+	}
+	isAvailable() { }
+	markAsRead() { }
+	displayInfo() { }
+}
+
+class Library {
+	constructor() {
+		this.books = []
+	}
+
+	addBook() { }
+	removeBook() { }
+	displayBooks = function displayBooks() { }
+	//display the number of books in the library
+	noOfBooks() { }
+	//search book in your library
+	searchBook(query) { }
+}
+
+/*================================================================*/
 
 (function($) {
 
