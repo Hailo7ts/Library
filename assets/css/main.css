@@ -2275,11 +2275,11 @@ button,
 
     /*Update Bookshelf Page*/
 
-    #main .bookshelf img{
+    .bookshelf img{
       width: 100%;
       height: 30rem;
     }
 
-    #main .bookshelf .actions ul{
-      
+    .bookshelf ul *:first-of-type{
+      margin-left: 2.5rem;
     }
