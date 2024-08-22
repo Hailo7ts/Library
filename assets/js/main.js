@@ -4,28 +4,6 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
-// Get the API key from the query string
-document.querySelector('#getBook').addEventListener('click', getBook)
-
-/*FETCH*/
-async function fetchData(){
-	//store input book value
-	let book = document.querySelector('input').value
-	try{
-		let url = `https://openlibrary.org/search.json?q=${book}`
-		let response = await fetch(url)
-		let data = await response.json()
-		console.log(data)
-	}
-	catch(err){
-	     console.log(`error: ${err}`)
-   }
-}
-
-
-
-
-
 
 (function($) {
 
@@ -285,4 +263,25 @@ async function fetchData(){
 })(jQuery);
 
 
+//adventlistener
+document.querySelector('.add-book').addEventListener('click', fetchData)
 
+async function fetchData(){
+	let bookTitle = document.querySelector('.book-title').value
+	try{
+	   let url = `https://openlibrary.org/search.json?q=${bookTitle}`
+	   let response = await fetch(url)
+	   let data = await response.json()
+	   console.log(data)
+
+	   //post added book below form
+	   document.querySelector('.added-book-title').innerText = data.docs[0].title
+	   document.querySelector('.added-book-author').innerText = data.docs[0].author_name
+	   document.querySelector('.added-book-first-sentence').innerText = data.docs[0].first_sentence
+	 }
+	 catch(err){
+	   console.log(`error: ${err}`)
+	 }
+   }
+  
+  fetchData()
