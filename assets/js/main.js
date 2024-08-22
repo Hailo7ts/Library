@@ -16,6 +16,11 @@ async function fetchData(){
 		let response = await fetch(url)
 		let data = await response.json()
 		console.log(data)
+
+		 //post added book below form
+		 document.querySelector('.added-book-title').innerText = data.docs[0].title
+		 document.querySelector('.added-book-author').innerText = data.docs[0].author_name
+		 document.querySelector('.added-book-first-sentence').innerText = data.docs[0].first_sentence
 	}
 	catch(err){
 	     console.log(`error: ${err}`)
@@ -309,26 +314,3 @@ class Library {
 
 })(jQuery);
 
-
-//adventlistener
-document.querySelector('.add-book').addEventListener('click', fetchData)
-
-async function fetchData(){
-	let bookTitle = document.querySelector('.book-title').value
-	try{
-	   let url = `https://openlibrary.org/search.json?q=${bookTitle}`
-	   let response = await fetch(url)
-	   let data = await response.json()
-	   console.log(data)
-
-	   //post added book below form
-	   document.querySelector('.added-book-title').innerText = data.docs[0].title
-	   document.querySelector('.added-book-author').innerText = data.docs[0].author_name
-	   document.querySelector('.added-book-first-sentence').innerText = data.docs[0].first_sentence
-	 }
-	 catch(err){
-	   console.log(`error: ${err}`)
-	 }
-   }
-  
-  fetchData()
