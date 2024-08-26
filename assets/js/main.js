@@ -53,11 +53,14 @@ class Book {
   
   //LIBRARY OBJECT
   class Library {
-	constructor(name) {
+	constructor(name, books) {
 	  this.name = name;
-	  this.books = [];
+	  if(books == null)
+	  	this.books = [];
+	  else
+	  	this.books = books;
 	}
-  
+	
 	// Method to add a new book
 	addBook(title, author, isbn) {
 	  const newBook = new Book(title, author, isbn);
@@ -99,44 +102,69 @@ class Book {
 
 /*================View Books======================*/
 
-const divBook = document.querySelector('.books')
+const divAvailable = document.querySelector('.books')
+const divUnavailable = document.querySelector('.unavailable')
 
 // TESTING
-const myLibrary = new Library("My Library");
+
+let myLibrary = new Library("My Library", null);
 
 // Add some books to the library
 myLibrary.addBook("The Hobbit", "J.R.R. Tolkien", "9780547928227");
 myLibrary.addBook("Harry Potter and the Sorcerer's Stone", "J.K. Rowling", "9780590353427");
 myLibrary.addBook("To Kill a Mockingbird", "Harper Lee", "9780061120084");
-myLibrary.addBook("The Hobbit", "J.R.R. Tolkien", "9780547928227");
-myLibrary.addBook("Harry Potter and the Sorcerer's Stone", "J.K. Rowling", "9780590353427");
-myLibrary.addBook("To Kill a Mockingbird", "Harper Lee", "9780061120084");
+myLibrary.books[0].available = false;
 
-// Display all available books
-myLibrary.displayAvailableBooks();
 
-// Search for books by title or author
-myLibrary.searchBook("harry potter");
-
-// Remove a book from the library
-myLibrary.removeBook("9780590353427");
-
-// Display available books after removal
-myLibrary.displayAvailableBooks();
+if(localStorage.getItem('library')){
+	myLibrary = JSON.parse(localStorage.getItem('library'));
+	myLibrary = new Library(myLibrary.name, myLibrary.books);
+	console.log("local "+myLibrary.books[0].title)
+}
+else{
+	localStorage.setItem("library", JSON.stringify(myLibrary));
+}
 
 //Populate books in View Library
 for(let b of myLibrary.books){
 	const art = document.createElement('article');
-	const titleHeading = document.createElement('h3')
-	const author = document.createElement('p')
-	const isbn = document.createElement('p')
+	const titleHeading = document.createElement('h3');
+	const author = document.createElement('p');
+	const isbn = document.createElement('p');
+	const btnRemove = document.createElement('button');
+	const btnMove = document.createElement('button');
+	btnRemove.innerText = "REMOVE";
+	btnMove.addEventListener('click', availability(b));
+	btnMove.classList.add("view-btn");
+	btnRemove.classList.add("view-btn");
     titleHeading.innerText = b.title;
 	author.innerText = b.author;
 	isbn.innerText = b.isbn;
 	art.appendChild(titleHeading);
 	art.appendChild(author);
 	art.appendChild(isbn);
-    divBook.appendChild(art);
+	art.appendChild(btnRemove);
+	if(b.available){
+		btnMove.innerText = "MOVE 🡣";
+		art.appendChild(btnMove);
+    	divAvailable.appendChild(art);
+	}
+	else{
+		btnMove.innerText = "MOVE 🡡";
+		art.appendChild(btnMove);
+		divUnavailable.appendChild(art);
+	}
+		
+}
+
+//Move Button
+function availability(b){
+	return function(){
+		b.available = !b.available;
+		localStorage.setItem("library", JSON.stringify(myLibrary));
+		
+		console.log("changed")
+	}
 }
 
 /*================================================================*/
