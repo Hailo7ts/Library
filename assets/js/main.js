@@ -5,17 +5,33 @@
 */
 
 // Get the API key from the query string
-//document.querySelector('#getBook').addEventListener('click', getBook)
+document.querySelector('.add-book').addEventListener('click', fetchData)
 
 /*FETCH*/
 async function fetchData(){
-	//store input book value
-	let book = document.querySelector('input').value
+	//store input book values
+	let bookTitleInput = document.querySelector('.book-title').value
+	let bookAuthorInput = document.querySelector('.book-author').value
+	
 	try{
-		let url = `https://openlibrary.org/search.json?q=${book}`
+		let url = `https://openlibrary.org/search.json?title=${bookTitleInput}&author=${bookAuthorInput}`
 		let response = await fetch(url)
 		let data = await response.json()
 		console.log(data)
+
+		//create book obj from returned JSON
+		let book = new Book(data.docs[0].title, data.docs[0].author_name[0], data.docs[0].isbn[0])
+
+		//add book to library object
+		addBookToLibbrary(book)
+
+		 //post added book below form
+		 document.querySelector('.added-book-title').innerText = book.title
+		 document.querySelector('.added-book-author').innerText = book.author
+
+		 //if book has a first sentence then display bellow title and author
+		 data.docs[0].first_sentence != undefined ? document.querySelector('.added-book-first-sentence').innerText = data.docs[0].first_sentence : ""
+
 	}
 	catch(err){
 	     console.log(`error: ${err}`)
@@ -64,8 +80,14 @@ class Book {
 	// Method to add a new book
 	addBook(title, author, isbn) {
 	  const newBook = new Book(title, author, isbn);
-	  this.books.push(newBook);
-	  console.log(`${newBook.title} by ${newBook.author} has been added to ${this.name}.`);
+
+	  //check if book already is in the library if it is not then add to library
+	  if(myLibrary.searchBook(newBook.title.toLowerCase()) === `No books found matching "${newBook.title.toLowerCase()}".`){
+		this.books.push(newBook);
+	  	console.log(`${newBook.title} by ${newBook.author} has been added to ${this.name}.`);
+	  }
+
+	  
 	}
   
 	// Method to remove a book
@@ -92,6 +114,7 @@ class Book {
 	  });
   
 	  if (results.length === 0) {
+		return(`No books found matching "${query}".`);
 		console.log(`No books found matching "${query}".`);
 	  } else {
 		console.log(`Search results for "${query}":`);
@@ -99,6 +122,7 @@ class Book {
 	  }
 	}
   }
+
 
 /*================View Books======================*/
 
@@ -114,6 +138,11 @@ myLibrary.addBook("The Hobbit", "J.R.R. Tolkien", "9780547928227");
 myLibrary.addBook("Harry Potter and the Sorcerer's Stone", "J.K. Rowling", "9780590353427");
 myLibrary.addBook("To Kill a Mockingbird", "Harper Lee", "9780061120084");
 myLibrary.books[0].available = false;
+
+function addBookToLibrary(newBook){
+	myLibrary.addBook(newBook.title, newBook.author, newBook.isbn)
+	console.log(myLibrary.books)
+}
 
 
 if(localStorage.getItem('library')){
@@ -168,6 +197,8 @@ function availability(b){
 }
 
 /*================================================================*/
+
+
 
 (function($) {
 
@@ -425,6 +456,4 @@ function availability(b){
 			});
 
 })(jQuery);
-
-
 
