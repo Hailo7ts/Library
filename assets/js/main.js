@@ -5,17 +5,28 @@
 */
 
 // Get the API key from the query string
-//document.querySelector('#getBook').addEventListener('click', getBook)
+document.querySelector('.add-book').addEventListener('click', fetchData)
 
 /*FETCH*/
 async function fetchData(){
 	//store input book value
-	let book = document.querySelector('input').value
+	let bookToAdd = document.querySelector('input').value
 	try{
-		let url = `https://openlibrary.org/search.json?q=${book}`
+		let url = `https://openlibrary.org/search.json?q=${bookToAdd}`
 		let response = await fetch(url)
 		let data = await response.json()
 		console.log(data)
+
+		//create book obj from returned JSON
+		let book = new Book(data.docs[0].title, data.docs[0].author_name[0], data.docs[0].isbn[0])
+		
+		console.log(book)
+
+		 //post added book below form
+		 document.querySelector('.added-book-title').innerText = data.docs[0].title
+		 document.querySelector('.added-book-author').innerText = data.docs[0].author_name
+		 document.querySelector('.added-book-first-sentence').innerText = data.docs[0].first_sentence
+
 	}
 	catch(err){
 	     console.log(`error: ${err}`)
@@ -397,6 +408,4 @@ for(let b of myLibrary.books){
 			});
 
 })(jQuery);
-
-
 
