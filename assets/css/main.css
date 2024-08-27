@@ -3126,6 +3126,17 @@ button:disabled,
   width: 100%;
 }
 
+.view-btn {
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+}
+
+.available {
+  color: #f56a6a;
+  font-size: 150%;
+}
+
 /* Wrapper */
 #wrapper {
   display: -moz-flex;
