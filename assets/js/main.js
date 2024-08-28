@@ -133,12 +133,6 @@ const divUnavailable = document.querySelector('.unavailable')
 
 let myLibrary = new Library("My Library", null);
 
-// Add some books to the library
-myLibrary.addBook("The Hobbit", "J.R.R. Tolkien", "9780547928227");
-myLibrary.addBook("Harry Potter and the Sorcerer's Stone", "J.K. Rowling", "9780590353427");
-myLibrary.addBook("To Kill a Mockingbird", "Harper Lee", "9780061120084");
-myLibrary.books[0].available = false;
-
 function addBookToLibrary(newBook){
 	myLibrary.addBook(newBook.title, newBook.author, newBook.isbn)
 	console.log(myLibrary.books)
