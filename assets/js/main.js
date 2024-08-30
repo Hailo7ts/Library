@@ -462,4 +462,14 @@ function availability(b) {
 	}
 }
 
+function removeFunc(b) {
+	return function () {
+		myLibrary.removeBook(b.isbn);
+		localStorage.setItem("library", JSON.stringify(myLibrary));
+		location.reload();
+		console.log("changed")
+	}
+}
+
+
 /*================================================================*/
