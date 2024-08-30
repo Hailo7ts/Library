@@ -429,6 +429,7 @@ if (document.querySelector('.books') != null) {
 		const btnMove = document.createElement('button');
 		btnRemove.innerText = "REMOVE";
 		btnMove.addEventListener('click', availability(b));
+		btnRemove.addEventListener('click', removeFunc(b));
 		btnMove.classList.add("view-btn");
 		btnRemove.classList.add("view-btn");
 		titleHeading.innerText = b.title;
@@ -462,10 +463,13 @@ function availability(b) {
 	}
 }
 
-//Remove Button btnRemove.addEventListener('click', function(e){  
-//remove the whole article from dom  e.target.parentElement.remove()  
-//remove book from localStorage  
-//get the title heading and find it in the localStorage  
-//delete from localStorage } )
+function removeFunc(b) {
+	return function () {
+		myLibrary.removeBook(b.isbn);
+		localStorage.setItem("library", JSON.stringify(myLibrary));
+		location.reload();
+		console.log("changed")
+	}
+}
 
 /*================================================================*/
