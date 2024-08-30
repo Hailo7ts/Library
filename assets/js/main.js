@@ -4,193 +4,7 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
-// Get the API key from the query string
-document.querySelector('.add-book').addEventListener('click', fetchData)
 
-/*FETCH*/
-async function fetchData(){
-	//store input book values
-	let bookTitleInput = document.querySelector('.book-title').value
-	let bookAuthorInput = document.querySelector('.book-author').value
-	
-	try{
-		let url = `https://openlibrary.org/search.json?title=${bookTitleInput}&author=${bookAuthorInput}`
-		let response = await fetch(url)
-		let data = await response.json()
-		console.log(data)
-
-		//create book obj from returned JSON
-		let book = new Book(data.docs[0].title, data.docs[0].author_name[0], data.docs[0].isbn[0])
-
-		//add book to library object
-		addBookToLibbrary(book)
-
-		 //post added book below form
-		 document.querySelector('.added-book-title').innerText = book.title
-		 document.querySelector('.added-book-author').innerText = book.author
-
-		 //if book has a first sentence then display bellow title and author
-		 data.docs[0].first_sentence != undefined ? document.querySelector('.added-book-first-sentence').innerText = data.docs[0].first_sentence : ""
-
-	}
-	catch(err){
-	     console.log(`error: ${err}`)
-   }
-}
-
-/*=============================  CLASSES =====================================*/
-
-
-//BOOK OBJECT
-class Book {
-	constructor(title, author, isbn) {
-	  this.title = title;
-	  this.author = author;
-	  this.isbn = isbn;
-	  this.available = true;
-	}
-  
-	// Getter for availability
-	isAvailable() {
-	  return this.available;
-	}
-  
-	// Setter for availability
-	setAvailability(status) {
-	  this.available = status;
-	}
-  
-	// Method to display book information
-	displayInfo() {
-	  console.log(`${this.title} by ${this.author} (ISBN: ${this.isbn})`);
-	}
-  }
-  
-  
-  //LIBRARY OBJECT
-  class Library {
-	constructor(name, books) {
-	  this.name = name;
-	  if(books == null)
-	  	this.books = [];
-	  else
-	  	this.books = books;
-	}
-	
-	// Method to add a new book
-	addBook(title, author, isbn) {
-	  const newBook = new Book(title, author, isbn);
-
-	  //check if book already is in the library if it is not then add to library
-	  if(myLibrary.searchBook(newBook.title.toLowerCase()) === `No books found matching "${newBook.title.toLowerCase()}".`){
-		this.books.push(newBook);
-	  	console.log(`${newBook.title} by ${newBook.author} has been added to ${this.name}.`);
-	  }
-
-	  
-	}
-  
-	// Method to remove a book
-	removeBook(isbn) {
-	  this.books = this.books.filter(book => book.isbn !== isbn);
-	  console.log(`Book with ISBN ${isbn} has been removed from ${this.name}.`);
-	}
-  
-	// Method to display all available books
-	displayAvailableBooks() {
-	  console.log(`Available books in ${this.name}:`);
-	  this.books.forEach(book => {
-		if (book.isAvailable()) {
-		  book.displayInfo();
-		}
-	  });
-	}
-  
-	// Method to search for a book by title or author
-	searchBook(query) {
-	  const results = this.books.filter(book => {
-		return book.title.toLowerCase().includes(query.toLowerCase()) ||
-			   book.author.toLowerCase().includes(query.toLowerCase());
-	  });
-  
-	  if (results.length === 0) {
-		return(`No books found matching "${query}".`);
-		console.log(`No books found matching "${query}".`);
-	  } else {
-		console.log(`Search results for "${query}":`);
-		results.forEach(book => book.displayInfo());
-	  }
-	}
-  }
-
-
-/*================View Books======================*/
-
-const divAvailable = document.querySelector('.books')
-const divUnavailable = document.querySelector('.unavailable')
-
-// TESTING
-
-let myLibrary = new Library("My Library", null);
-
-function addBookToLibrary(newBook){
-	myLibrary.addBook(newBook.title, newBook.author, newBook.isbn)
-	console.log(myLibrary.books)
-}
-
-
-if(localStorage.getItem('library')){
-	myLibrary = JSON.parse(localStorage.getItem('library'));
-	myLibrary = new Library(myLibrary.name, myLibrary.books);
-	console.log("local "+myLibrary.books[0].title)
-}
-else{
-	localStorage.setItem("library", JSON.stringify(myLibrary));
-}
-
-//Populate books in View Library
-for(let b of myLibrary.books){
-	const art = document.createElement('article');
-	const titleHeading = document.createElement('h3');
-	const author = document.createElement('p');
-	const isbn = document.createElement('p');
-	const btnRemove = document.createElement('button');
-	const btnMove = document.createElement('button');
-	btnRemove.innerText = "REMOVE";
-	btnMove.addEventListener('click', availability(b));
-	btnMove.classList.add("view-btn");
-	btnRemove.classList.add("view-btn");
-    titleHeading.innerText = b.title;
-	author.innerText = b.author;
-	isbn.innerText = b.isbn;
-	art.appendChild(titleHeading);
-	art.appendChild(author);
-	art.appendChild(isbn);
-	art.appendChild(btnRemove);
-	if(b.available){
-		btnMove.innerText = "MOVE 🡣";
-		art.appendChild(btnMove);
-    	divAvailable.appendChild(art);
-	}
-	else{
-		btnMove.innerText = "MOVE 🡡";
-		art.appendChild(btnMove);
-		divUnavailable.appendChild(art);
-	}
-		
-}
-
-//Move Button
-function availability(b){
-	return function(){
-		b.available = !b.available;
-		localStorage.setItem("library", JSON.stringify(myLibrary));
-		
-		console.log("changed")
-	}
-}
-
-/*================================================================*/
 
 
 
@@ -451,3 +265,194 @@ function availability(b){
 
 })(jQuery);
 
+
+/*=============================  API =====================================*/
+
+
+// Get the API key from the query string
+document.querySelector('.add-book').addEventListener('click', fetchData)
+
+/*FETCH*/
+async function fetchData(){
+	//store input book values
+	let bookTitleInput = document.querySelector('.book-title').value
+	let bookAuthorInput = document.querySelector('.book-author').value
+	
+	try{
+		let url = `https://openlibrary.org/search.json?title=${bookTitleInput}&author=${bookAuthorInput}`
+		let response = await fetch(url)
+		let data = await response.json()
+		console.log(data)
+
+		//create book obj from returned JSON
+		let book = new Book(data.docs[0].title, data.docs[0].author_name[0], data.docs[0].isbn[0])
+
+		//add book to library object
+		addBookToLibbrary(book)
+
+		 //post added book below form
+		 document.querySelector('.added-book-title').innerText = book.title
+		 document.querySelector('.added-book-author').innerText = book.author
+
+		 //if book has a first sentence then display bellow title and author
+		 data.docs[0].first_sentence != undefined ? document.querySelector('.added-book-first-sentence').innerText = data.docs[0].first_sentence : ""
+
+	}
+	catch(err){
+	     console.log(`error: ${err}`)
+   }
+}
+
+/*=============================  CLASSES =====================================*/
+
+
+//BOOK OBJECT
+class Book {
+	constructor(title, author, isbn) {
+	  this.title = title;
+	  this.author = author;
+	  this.isbn = isbn;
+	  this.available = true;
+	}
+  
+	// Getter for availability
+	isAvailable() {
+	  return this.available;
+	}
+  
+	// Setter for availability
+	setAvailability(status) {
+	  this.available = status;
+	}
+  
+	// Method to display book information
+	displayInfo() {
+	  console.log(`${this.title} by ${this.author} (ISBN: ${this.isbn})`);
+	}
+  }
+  
+  
+  //LIBRARY OBJECT
+  class Library {
+	constructor(name, books) {
+	  this.name = name;
+	  if(books == null)
+	  	this.books = [];
+	  else
+	  	this.books = books;
+	}
+	
+	// Method to add a new book
+	addBook(title, author, isbn) {
+	  const newBook = new Book(title, author, isbn);
+
+	  //check if book already is in the library if it is not then add to library
+	  if(myLibrary.searchBook(newBook.title.toLowerCase()) === `No books found matching "${newBook.title.toLowerCase()}".`){
+		this.books.push(newBook);
+	  	console.log(`${newBook.title} by ${newBook.author} has been added to ${this.name}.`);
+	  }
+
+	  
+	}
+  
+	// Method to remove a book
+	removeBook(isbn) {
+	  this.books = this.books.filter(book => book.isbn !== isbn);
+	  console.log(`Book with ISBN ${isbn} has been removed from ${this.name}.`);
+	}
+  
+	// Method to display all available books
+	displayAvailableBooks() {
+	  console.log(`Available books in ${this.name}:`);
+	  this.books.forEach(book => {
+		if (book.isAvailable()) {
+		  book.displayInfo();
+		}
+	  });
+	}
+  
+	// Method to search for a book by title or author
+	searchBook(query) {
+	  const results = this.books.filter(book => {
+		return book.title.toLowerCase().includes(query.toLowerCase()) ||
+			   book.author.toLowerCase().includes(query.toLowerCase());
+	  });
+  
+	  if (results.length === 0) {
+		return(`No books found matching "${query}".`);
+		console.log(`No books found matching "${query}".`);
+	  } else {
+		console.log(`Search results for "${query}":`);
+		results.forEach(book => book.displayInfo());
+	  }
+	}
+  }
+
+
+/*================View Books======================*/
+
+const divAvailable = document.querySelector('.books')
+const divUnavailable = document.querySelector('.unavailable')
+
+// TESTING
+
+let myLibrary = new Library("My Library", null);
+
+function addBookToLibrary(newBook){
+	myLibrary.addBook(newBook.title, newBook.author, newBook.isbn)
+	console.log(myLibrary.books)
+}
+
+
+if(localStorage.getItem('library')){
+	myLibrary = JSON.parse(localStorage.getItem('library'));
+	myLibrary = new Library(myLibrary.name, myLibrary.books);
+	console.log("local "+myLibrary.books[0].title)
+}
+else{
+	localStorage.setItem("library", JSON.stringify(myLibrary));
+}
+
+//Populate books in View Library
+for(let b of myLibrary.books){
+	const art = document.createElement('article');
+	const titleHeading = document.createElement('h3');
+	const author = document.createElement('p');
+	const isbn = document.createElement('p');
+	const btnRemove = document.createElement('button');
+	const btnMove = document.createElement('button');
+	btnRemove.innerText = "REMOVE";
+	btnMove.addEventListener('click', availability(b));
+	btnMove.classList.add("view-btn");
+	btnRemove.classList.add("view-btn");
+    titleHeading.innerText = b.title;
+	author.innerText = b.author;
+	isbn.innerText = b.isbn;
+	art.appendChild(titleHeading);
+	art.appendChild(author);
+	art.appendChild(isbn);
+	art.appendChild(btnRemove);
+	if(b.available){
+		btnMove.innerText = "MOVE 🡣";
+		art.appendChild(btnMove);
+    	divAvailable.appendChild(art);
+	}
+	else{
+		btnMove.innerText = "MOVE 🡡";
+		art.appendChild(btnMove);
+		divUnavailable.appendChild(art);
+	}
+		
+}
+
+//Move Button
+function availability(b){
+	return function(){
+		b.available = !b.available;
+		localStorage.setItem("library", JSON.stringify(myLibrary));
+		
+		console.log("changed")
+	}
+}
+
+/*================================================================*/
