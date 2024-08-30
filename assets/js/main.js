@@ -7,6 +7,8 @@
 // Get the API key from the query string
 document.querySelector('.add-book').addEventListener('click', fetchData)
 
+
+
 /*FETCH*/
 async function fetchData(){
 	//store input book values
@@ -23,7 +25,7 @@ async function fetchData(){
 		let book = new Book(data.docs[0].title, data.docs[0].author_name[0], data.docs[0].isbn[0])
 
 		//add book to library object
-		addBookToLibbrary(book)
+		addBookToLibrary(book)
 
 		 //post added book below form
 		 document.querySelector('.added-book-title').innerText = book.title
@@ -79,7 +81,7 @@ class Book {
 	
 	// Method to add a new book
 	addBook(title, author, isbn) {
-	  const newBook = new Book(title, author, isbn);
+	 const newBook = new Book(title, author, isbn);
 
 	  //check if book already is in the library if it is not then add to library
 	  if(myLibrary.searchBook(newBook.title.toLowerCase()) === `No books found matching "${newBook.title.toLowerCase()}".`){
@@ -130,11 +132,11 @@ const divAvailable = document.querySelector('.books')
 const divUnavailable = document.querySelector('.unavailable')
 
 // TESTING
-
 let myLibrary = new Library("My Library", null);
 
 function addBookToLibrary(newBook){
 	myLibrary.addBook(newBook.title, newBook.author, newBook.isbn)
+	localStorage.setItem("library", JSON.stringify(myLibrary));
 	console.log(myLibrary.books)
 }
 
@@ -142,7 +144,8 @@ function addBookToLibrary(newBook){
 if(localStorage.getItem('library')){
 	myLibrary = JSON.parse(localStorage.getItem('library'));
 	myLibrary = new Library(myLibrary.name, myLibrary.books);
-	console.log("local "+myLibrary.books[0].title)
+	//console.log("local " + myLibrary.books[0].title)
+
 }
 else{
 	localStorage.setItem("library", JSON.stringify(myLibrary));
@@ -189,6 +192,22 @@ function availability(b){
 		console.log("changed")
 	}
 }
+
+
+
+//Remove Button
+btnRemove.addEventListener('click', function(e){
+	//remove the whole article from dom
+	e.target.parentElement.remove()
+	//remove book from localStorage
+	//get the title heading and find it in the localStorage
+	//delete from localStorage
+} )
+
+
+
+
+
 
 /*================================================================*/
 
