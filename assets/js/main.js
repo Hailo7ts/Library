@@ -290,13 +290,9 @@ async function fetchData() {
 
 		//add book to library object
 		addBookToLibrary(book)
-
-		//post added book below form
-		document.querySelector('.added-book-title').innerText = book.title
-		document.querySelector('.added-book-author').innerText = book.author
-
-		//if book has a first sentence then display bellow title and author
-		data.docs[0].first_sentence != undefined ? document.querySelector('.added-book-first-sentence').innerText = data.docs[0].first_sentence : ""
+		
+		//display added book below form
+		document.querySelector('.display-added-book').innerText = book.displayInfo()
 
 	}
 	catch (err) {
@@ -308,7 +304,7 @@ async function fetchData() {
 
 
 //BOOK OBJECT
-class Book {
+class Book{
 	constructor(title, author, isbn) {
 		this.title = title;
 		this.author = author;
@@ -329,6 +325,7 @@ class Book {
 	// Method to display book information
 	displayInfo() {
 		console.log(`${this.title} by ${this.author} (ISBN: ${this.isbn})`);
+		return(`${this.title} by ${this.author} (ISBN: ${this.isbn})`);
 	}
 }
 
@@ -348,7 +345,8 @@ class Library {
 		const newBook = new Book(title, author, isbn);
 
 		//check if book already is in the library if it is not then add to library
-		if (myLibrary.searchBook(newBook.title.toLowerCase()) === `No books found matching "${newBook.title.toLowerCase()}".`) {
+		if ((myLibrary.searchBook(newBook.title.toLowerCase()) === `No books found matching "${newBook.title.toLowerCase()}".`) && 
+		(myLibrary.searchBook(newBook.author.toLowerCase()) === `No books found matching "${newBook.author.toLowerCase()}".`)) {
 			this.books.push(newBook);
 			console.log(`${newBook.title} by ${newBook.author} has been added to ${this.name}.`);
 		}
@@ -471,5 +469,6 @@ function removeFunc(b) {
 		console.log("changed")
 	}
 }
+
 
 /*================================================================*/
