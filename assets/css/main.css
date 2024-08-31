@@ -2728,7 +2728,7 @@ button:disabled,
   display: flex;
   margin: 0 0 3em 3em;
   position: relative;
-  width: calc(50% - 3em);
+  width: calc(100% - 3em);
 }
 
 .features article:nth-child(2n - 1) {
@@ -3095,13 +3095,13 @@ button:disabled,
   content: '';
   display: block;
   height: calc(100% + 6em);
-  left: -3em;
+  right: -3em;
   position: absolute;
   top: 0;
   width: 1px;
 }
 
-.books article:after, .homeView article:after {
+.books article:after {
   background: rgba(210, 215, 217, 0.75);
   bottom: -3em;
   content: '';
@@ -3750,4 +3750,13 @@ button:disabled,
 
 .bookshelf ul *:first-of-type {
   margin-left: .7rem;
+}
+
+.bookIcon{
+  margin-right: 3em;
+  width: 60% !important;
+}
+
+.viewbtn{
+  margin: 2em 2em;
 }

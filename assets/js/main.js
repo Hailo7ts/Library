@@ -452,7 +452,8 @@ if (document.querySelector('.books') != null) {
 
 if (document.querySelector('.homeView') != null) {
 	const homeView = document.querySelector('.homeView')
-	for (let b of myLibrary.books) {
+	for (let i=0; i<3; i++) {
+		let b=myLibrary.books[i];
 		const art = document.createElement('article');
 		const titleHeading = document.createElement('h3');
 		const author = document.createElement('p');
