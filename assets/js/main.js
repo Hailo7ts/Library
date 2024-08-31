@@ -429,6 +429,7 @@ if (document.querySelector('.books') != null) {
 		const btnMove = document.createElement('button');
 		btnRemove.innerText = "REMOVE";
 		btnMove.addEventListener('click', availability(b));
+		btnRemove.addEventListener('click', removeFunc(b));
 		btnMove.classList.add("view-btn");
 		btnRemove.classList.add("view-btn");
 		titleHeading.innerText = b.title;
