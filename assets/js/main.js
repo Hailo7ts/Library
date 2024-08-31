@@ -416,7 +416,6 @@ if (document.querySelector('.books') != null) {
 	const divAvailable = document.querySelector('.books')
 	const divUnavailable = document.querySelector('.unavailable')
 
-
 	//Populate books in View Library
 	for (let b of myLibrary.books) {
 		const art = document.createElement('article');
@@ -448,6 +447,23 @@ if (document.querySelector('.books') != null) {
 			divUnavailable.appendChild(art);
 		}
 
+	}
+}
+
+if (document.querySelector('.homeView') != null) {
+	const homeView = document.querySelector('.homeView')
+	for (let b of myLibrary.books) {
+		const art = document.createElement('article');
+		const titleHeading = document.createElement('h3');
+		const author = document.createElement('p');
+		const isbn = document.createElement('p');
+		titleHeading.innerText = b.title;
+		author.innerText = b.author;
+		isbn.innerText = b.isbn;
+		art.appendChild(titleHeading);
+		art.appendChild(author);
+		art.appendChild(isbn);
+		homeView.appendChild(art);
 	}
 }
 
