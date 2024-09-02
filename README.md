@@ -20,7 +20,7 @@ Getting Started
 To get started with this project, simply clone the repository and open the index.html file in your browser.
 
 bash
-git clone https://github.com/Aisha-Umar/ShelfSense.git
+git clone https://github.com/Hailo7ts/Library.git
 cd library-management
 
 Usage:
