@@ -1,6 +1,6 @@
 # Library
 Responsive website to manage your bookshelf library
-![Library Management Screenshot](images/library.gif)
+![Library Management Screenshot](images/library1.gif)
 
 
 Library Management Made Easy
