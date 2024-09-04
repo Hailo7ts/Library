@@ -373,7 +373,7 @@ class Library {
 	// Method to search for a book by title or author
 	searchBook(query) {
 		const results = this.books.filter(book => {
-			return book.title.toLowerCase().includes(query.toLowerCase()) ||
+			return book.title.toLowerCase().includes(query.toLowerCase()) &&
 				book.author.toLowerCase().includes(query.toLowerCase());
 		});
 
