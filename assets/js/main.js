@@ -290,7 +290,7 @@ async function fetchData() {
 
 		//add book to library object
 		addBookToLibrary(book)
-		
+
 		//display added book below form
 		document.querySelector('.display-added-book').innerText = book.displayInfo()
 
@@ -304,7 +304,7 @@ async function fetchData() {
 
 
 //BOOK OBJECT
-class Book{
+class Book {
 	constructor(title, author, isbn) {
 		this.title = title;
 		this.author = author;
@@ -325,7 +325,7 @@ class Book{
 	// Method to display book information
 	displayInfo() {
 		console.log(`${this.title} by ${this.author} (ISBN: ${this.isbn})`);
-		return(`${this.title} by ${this.author} (ISBN: ${this.isbn})`);
+		return (`${this.title} by ${this.author} (ISBN: ${this.isbn})`);
 	}
 }
 
@@ -345,8 +345,8 @@ class Library {
 		const newBook = new Book(title, author, isbn);
 
 		//check if book already is in the library if it is not then add to library
-		if ((myLibrary.searchBook(newBook.title.toLowerCase()) === `No books found matching "${newBook.title.toLowerCase()}".`) && 
-		(myLibrary.searchBook(newBook.author.toLowerCase()) === `No books found matching "${newBook.author.toLowerCase()}".`)) {
+		if ((myLibrary.searchBook(newBook.title.toLowerCase()) === `No books found matching "${newBook.title.toLowerCase()}".`) &&
+			(myLibrary.searchBook(newBook.author.toLowerCase()) === `No books found matching "${newBook.author.toLowerCase()}".`)) {
 			this.books.push(newBook);
 			console.log(`${newBook.title} by ${newBook.author} has been added to ${this.name}.`);
 		}
@@ -390,10 +390,6 @@ class Library {
 
 /*================View Books======================*/
 
-
-
-// TESTING
-
 let myLibrary = new Library("My Library", null);
 
 function addBookToLibrary(newBook) {
@@ -416,44 +412,56 @@ if (document.querySelector('.books') != null) {
 	const divAvailable = document.querySelector('.books')
 	const divUnavailable = document.querySelector('.unavailable')
 
-	//Populate books in View Library
-	for (let b of myLibrary.books) {
-		const art = document.createElement('article');
-		const titleHeading = document.createElement('h3');
-		const author = document.createElement('p');
-		const isbn = document.createElement('p');
-		const btnRemove = document.createElement('button');
-		const btnMove = document.createElement('button');
-		btnRemove.innerText = "REMOVE";
-		btnMove.addEventListener('click', availability(b));
-		btnRemove.addEventListener('click', removeFunc(b));
-		btnMove.classList.add("view-btn");
-		btnRemove.classList.add("view-btn");
-		titleHeading.innerText = b.title;
-		author.innerText = b.author;
-		isbn.innerText = b.isbn;
-		art.appendChild(titleHeading);
-		art.appendChild(author);
-		art.appendChild(isbn);
-		art.appendChild(btnRemove);
-		if (b.available) {
-			btnMove.innerText = "MOVE 🡣";
-			art.appendChild(btnMove);
-			divAvailable.appendChild(art);
-		}
-		else {
-			btnMove.innerText = "MOVE 🡡";
-			art.appendChild(btnMove);
-			divUnavailable.appendChild(art);
-		}
+	const searchBar = document.getElementById("query");
+	searchBar.addEventListener("input", updateView);
+	updateView();
 
+	//Populate books in View Library
+	function updateView(e){ 
+		divAvailable.innerHTML = '';
+		divUnavailable.innerHTML = '';
+		for (let b of myLibrary.books) {
+			const art = document.createElement('article');
+			const titleHeading = document.createElement('h3');
+			const author = document.createElement('p');
+			const isbn = document.createElement('p');
+			const btnRemove = document.createElement('button');
+			const btnMove = document.createElement('button');
+			btnRemove.innerText = "REMOVE";
+			btnMove.addEventListener('click', availability(b));
+			btnRemove.addEventListener('click', removeFunc(b));
+			btnMove.classList.add("view-btn");
+			btnRemove.classList.add("view-btn");
+			titleHeading.innerText = b.title;
+			author.innerText = b.author;
+			isbn.innerText = b.isbn;
+			art.appendChild(titleHeading);
+			art.appendChild(author);
+			art.appendChild(isbn);
+			art.appendChild(btnRemove);
+			let bool = (e===undefined) ? false : b.title.toLowerCase().includes(e.target.value.toLowerCase());
+			if (e === undefined || bool) {
+				if (b.available) {
+					btnMove.innerText = "MOVE 🡣";
+					art.appendChild(btnMove);
+					divAvailable.appendChild(art);
+				}
+				else {
+					btnMove.innerText = "MOVE 🡡";
+					art.appendChild(btnMove);
+					divUnavailable.appendChild(art);
+				}
+			}
+
+
+		}
 	}
 }
 
 if (document.querySelector('.homeView') != null) {
 	const homeView = document.querySelector('.homeView')
-	for (let i=0; i<3; i++) {
-		let b=myLibrary.books[i];
+	for (let i = 0; i < 3; i++) {
+		let b = myLibrary.books[i];
 		const art = document.createElement('article');
 		const titleHeading = document.createElement('h3');
 		const author = document.createElement('p');
@@ -486,6 +494,5 @@ function removeFunc(b) {
 		console.log("changed")
 	}
 }
-
 
 /*================================================================*/
