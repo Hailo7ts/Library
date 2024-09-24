@@ -661,6 +661,12 @@ hr.major {
 .row.gtr-200.gtr-uniform>* {
   padding-top: 3em;
 }
+.case{
+  max-width: 100%; 
+  overflow: hidden; 
+  margin:auto;
+}
+
 
 @media screen and (max-width: 1680px) {
   .row {
@@ -1635,6 +1641,16 @@ hr.major {
 }
 
 @media screen and (max-width: 480px) {
+  
+.case{
+  max-width: 100%; 
+  max-height: 300px; 
+  overflow: hidden; 
+  margin:auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
   .row {
     display: flex;
     flex-wrap: wrap;
@@ -3542,7 +3558,7 @@ button:disabled,
   width: 50%;
 }
 
-#banner .image {
+#banner .image{
   -moz-flex-grow: 0;
   -webkit-flex-grow: 0;
   -ms-flex-grow: 0;
@@ -3556,7 +3572,20 @@ button:disabled,
   width: 50%;
 }
 
-#banner .image img {
+.case {
+  -moz-flex-grow: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-grow: 0;
+  flex-grow: 0;
+  -moz-flex-shrink: 0;
+  -webkit-flex-shrink: 0;
+  -ms-flex-shrink: 0;
+  flex-shrink: 0;
+  display: block;
+  margin-bottom: 1em;
+}
+
+#banner .image img, .case img {
   height: 100%;
   -moz-object-fit: cover;
   -webkit-object-fit: cover;
@@ -3567,6 +3596,12 @@ button:disabled,
   -ms-object-position: center;
   object-position: center;
   width: 100%;
+}
+
+
+.case img{
+  max-width: 100%; 
+  object-position: center;
 }
 
 @media screen and (orientation: portrait) {
