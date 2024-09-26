@@ -1,4 +1,4 @@
-# Library
+# BookBase
 Responsive website to manage your bookshelf library
 ![Library Management Screenshot](images/library1.gif)
 
